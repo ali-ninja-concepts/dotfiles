@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ../hardware-configuration.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -70,7 +70,8 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # PostgreSQL 16 for development
+  # PostgreSQL 16 for local development ONLY
+  # Uses trust auth on localhost - do not expose externally
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_16;

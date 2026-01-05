@@ -24,6 +24,7 @@ After installation:
 - Zsh with Oh My Zsh (dpoggi theme)
 - NVIDIA proprietary drivers (tested with RTX 5080)
 - Auto-detecting multi-monitor setup
+- PostgreSQL 16 and Docker for development
 - Common dev tools: git, neovim, nodejs, go, bun
 - Modern CLI tools: eza, bat, fzf, ripgrep
 
@@ -31,16 +32,20 @@ After installation:
 
 ```
 dotfiles/
+├── flake.nix               # Entry point (repo root)
+├── flake.lock
 ├── nixos/
 │   ├── configuration.nix   # System config (packages, drivers, users)
 │   ├── home.nix            # User config (i3, shell, apps)
-│   └── flake.nix           # Entry point for the flake
+│   └── hardware-configuration.nix  # Generated per-machine (not in repo)
 ├── config/                 # App configs (kitty, nvim)
 ├── scripts/
 │   ├── autorandr.sh        # Auto-detect and arrange monitors
 │   └── get-luks-uuid.sh    # Helper to find your LUKS UUID
 └── .env.example            # Template for secrets
 ```
+
+> **Note**: `flake.nix` is at the repository root. This follows the official NixOS flake layout.
 
 ## Requirements
 
@@ -84,7 +89,9 @@ For Wi-Fi, use `nmtui`.
 lsblk
 ```
 
-Find the SSD where you want NixOS. In this guide, we'll use `/dev/nvme0n1`. Adjust if yours is different.
+Find the SSD where you want NixOS.
+
+> **Important**: The examples below use `/dev/nvme0n1`. Your disk may be different (e.g., `/dev/nvme1n1`, `/dev/sda`). Replace accordingly.
 
 Do not touch your Windows drive if you're dual-booting.
 
@@ -124,25 +131,26 @@ mkdir -p /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
 ```
 
-### Step 7: Generate Hardware Config
+### Step 7: Clone This Repository
 
-```bash
-nixos-generate-config --root /mnt
-```
-
-This creates `/mnt/etc/nixos/hardware-configuration.nix`. Don't edit this file.
-
-### Step 8: Clone This Repository
+> **Important**: Clone the repo **before** generating hardware config.
 
 ```bash
 git clone https://github.com/ali-zahir/dotfiles.git /mnt/etc/nixos
 ```
 
+### Step 8: Generate Hardware Config
+
+```bash
+nixos-generate-config --root /mnt
+```
+
+This creates `/mnt/etc/nixos/hardware-configuration.nix` at the repo root, which is exactly where the flake expects it.
+
 ### Step 9: Get Your LUKS UUID
 
 ```bash
-chmod +x /mnt/etc/nixos/scripts/get-luks-uuid.sh
-/mnt/etc/nixos/scripts/get-luks-uuid.sh
+blkid /dev/nvme0n1p2
 ```
 
 You'll see output like:
@@ -311,8 +319,8 @@ To customize, edit `scripts/autorandr.sh`.
 | `ls` | eza |
 | `ll` | eza -la |
 | `cat` | bat |
-| `rebuild` | sudo nixos-rebuild switch |
-| `update` | sudo nixos-rebuild switch --upgrade |
+| `rebuild` | sudo nixos-rebuild switch --flake /etc/nixos#nixos |
+| `update` | sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade |
 | `copy` | copy to clipboard |
 | `p` | paste from clipboard |
 

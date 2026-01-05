@@ -31,13 +31,13 @@
           inherit system;
           specialArgs = { inherit inputs pkgs-unstable; };
           modules = [
-            ./configuration.nix
+            ./nixos/configuration.nix
             
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.ali-zahir = import ./home.nix;
+              home-manager.users.ali-zahir = import ./nixos/home.nix;
             }
           ];
         };
@@ -46,7 +46,7 @@
       homeConfigurations = {
         "ali-zahir" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          modules = [ ./home.nix ];
+          modules = [ ./nixos/home.nix ];
         };
       };
     };

@@ -210,8 +210,8 @@
       ll = "eza -la";
       copy = "xsel --clipboard --input";
       p = "xsel --clipboard --output";
-      rebuild = "sudo nixos-rebuild switch";
-      update = "sudo nixos-rebuild switch --upgrade";
+      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
+      update = "sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade";
     };
 
     sessionVariables = {
