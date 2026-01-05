@@ -1,0 +1,19 @@
+*.backup
+.secrets.env
+secrets.env
+*.env
+!.env.example
+
+# Nix
+result
+result-*
+
+# OS
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Editor
+.vscode/
+.idea/
