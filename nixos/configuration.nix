@@ -119,7 +119,6 @@
     feh
     maim
     xsel
-    parcellite
     brightnessctl
     xss-lock
 
