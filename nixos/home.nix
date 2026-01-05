@@ -241,5 +241,12 @@
     vimAlias = true;
   };
 
+  # direnv for automatic dev environment activation
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   programs.home-manager.enable = true;
 }

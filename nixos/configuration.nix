@@ -70,10 +70,29 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # PostgreSQL 16 for development
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_16;
+    enableTCPIP = true;
+    authentication = pkgs.lib.mkOverride 10 ''
+      # TYPE  DATABASE        USER            ADDRESS                 METHOD
+      local   all             all                                     trust
+      host    all             all             127.0.0.1/32            trust
+      host    all             all             ::1/128                 trust
+    '';
+  };
+
+  # Docker for development containers
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+  };
+
   users.users.ali-zahir = {
     isNormalUser = true;
     description = "Ali Zahir";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "tss" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "tss" "docker" ];
     shell = pkgs.zsh;
   };
 
