@@ -1,85 +1,96 @@
 # NixOS Dotfiles
 
-Personal NixOS configuration for desktop with i3wm and NVIDIA RTX 5080.
+Personal NixOS configuration for a desktop with i3 window manager and NVIDIA GPU.
 
-## Structure
+## Why This Exists
+
+NixOS is different from traditional Linux distributions. Instead of installing packages and editing config files scattered across the system, everything is declared in a few files. If something breaks, you can roll back in seconds. If you reinstall, you get the exact same system.
+
+This repo captures a working desktop setup:
+- Encrypted disk (LUKS) so your data is protected if the machine is stolen
+- Optional TPM2 auto-unlock so you don't type a password every boot
+- i3 window manager with sensible defaults
+- NVIDIA drivers configured correctly (this is notoriously tricky on Linux)
+
+The installation steps are written for someone who hasn't used NixOS before. You don't need to understand Nix to get this running.
+
+## What You Get
+
+After installation:
+
+- Encrypted NixOS system (LUKS)
+- i3 window manager with dmenu, i3status, picom compositor
+- Kitty terminal with JetBrains Mono font
+- Zsh with Oh My Zsh (dpoggi theme)
+- NVIDIA proprietary drivers (tested with RTX 5080)
+- Auto-detecting multi-monitor setup
+- Common dev tools: git, neovim, nodejs, go, bun
+- Modern CLI tools: eza, bat, fzf, ripgrep
+
+## Repository Layout
 
 ```
 dotfiles/
 ├── nixos/
-│   ├── configuration.nix   # System: NVIDIA, i3, packages, fonts, TPM2
-│   ├── home.nix            # User: i3 config, zsh, kitty, picom
-│   └── flake.nix           # Flake entry point
-├── config/
-│   ├── kitty/              # Kitty terminal config
-│   └── nvim/               # Neovim config
+│   ├── configuration.nix   # System config (packages, drivers, users)
+│   ├── home.nix            # User config (i3, shell, apps)
+│   └── flake.nix           # Entry point for the flake
+├── config/                 # App configs (kitty, nvim)
 ├── scripts/
-│   ├── autorandr.sh        # Auto-detect and configure monitors
-│   └── get-luks-uuid.sh    # Helper to get LUKS UUID for install
-└── .env.example            # Secrets template
+│   ├── autorandr.sh        # Auto-detect and arrange monitors
+│   └── get-luks-uuid.sh    # Helper to find your LUKS UUID
+└── .env.example            # Template for secrets
 ```
 
-## Hardware
+## Requirements
 
-- GPU: NVIDIA RTX 5080 (proprietary drivers)
-- Encryption: LUKS with TPM2 auto-unlock
-- Dual-boot: Windows on separate SSD (no interference)
-- Monitors: Auto-detected via `autorandr.sh`
+- UEFI system (not legacy BIOS)
+- NVIDIA GPU (config uses proprietary drivers)
+- TPM2 chip (optional, for auto-unlock)
+- Empty SSD for NixOS (Windows can stay on a separate drive)
 
----
+## Installation
 
-## Installing NixOS (UEFI + LUKS + Flakes)
+This follows the [official NixOS installation guide](https://nixos.org/manual/nixos/stable/#sec-installation) with LUKS encryption added.
 
-Official docs: https://nixos.org/manual/nixos/stable/#sec-installation
+### Step 1: Create Installation USB
 
-### Prerequisites
+Download the NixOS graphical ISO from https://nixos.org/download.html
 
-- UEFI system with TPM2
-- NixOS graphical ISO on USB
-- Empty SSD for NixOS (Windows stays on its own SSD)
-
-### 1. Create Installation Media
-
-Download: https://nixos.org/download.html
-
-Flash using [Balena Etcher](https://www.balena.io/etcher/) or:
-
+Flash it to a USB drive:
 ```bash
 sudo dd bs=4M conv=fsync oflag=direct status=progress if=nixos.iso of=/dev/sdX
 ```
 
-Boot in **UEFI mode** (disable Secure Boot for now).
+Boot from the USB in UEFI mode. Disable Secure Boot in your BIOS if needed.
 
-### 2. Boot Installer & Get Root Shell
+### Step 2: Open a Terminal
 
+Once the installer loads, open a terminal and get root:
 ```bash
 sudo -i
 ```
 
-Verify networking:
-
+Check networking:
 ```bash
 ip a
 ```
 
-For Wi-Fi:
+For Wi-Fi, use `nmtui`.
 
-```bash
-nmtui
-```
-
-### 3. Identify Your NixOS Disk
+### Step 3: Identify Your Disk
 
 ```bash
 lsblk
 ```
 
-Find the SSD for NixOS (NOT your Windows drive).
-Example: `/dev/nvme0n1` (adjust commands below accordingly).
+Find the SSD where you want NixOS. In this guide, we'll use `/dev/nvme0n1`. Adjust if yours is different.
 
-### 4. Partition Disk (UEFI + LUKS)
+Do not touch your Windows drive if you're dual-booting.
 
-**This erases the target disk completely.**
+### Step 4: Partition the Disk
+
+This erases everything on the target disk.
 
 ```bash
 parted /dev/nvme0n1 -- mklabel gpt
@@ -88,19 +99,21 @@ parted /dev/nvme0n1 -- set 1 esp on
 parted /dev/nvme0n1 -- mkpart primary 1GB 100%
 ```
 
-### 5. Setup LUKS Encryption
+### Step 5: Set Up Encryption
 
+Create the encrypted container:
 ```bash
 cryptsetup luksFormat /dev/nvme0n1p2
 ```
 
-Enter a **strong passphrase** (you'll need this for recovery).
+You'll be asked for a passphrase. Choose something strong. This is your recovery key if TPM unlock ever fails.
 
+Open the encrypted container:
 ```bash
 cryptsetup open /dev/nvme0n1p2 cryptroot
 ```
 
-### 6. Format & Mount
+### Step 6: Format and Mount
 
 ```bash
 mkfs.fat -F 32 -n BOOT /dev/nvme0n1p1
@@ -111,76 +124,72 @@ mkdir -p /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
 ```
 
-### 7. Generate Hardware Config
+### Step 7: Generate Hardware Config
 
 ```bash
 nixos-generate-config --root /mnt
 ```
 
-This creates `/mnt/etc/nixos/hardware-configuration.nix` (don't edit it).
+This creates `/mnt/etc/nixos/hardware-configuration.nix`. Don't edit this file.
 
-### 8. Clone This Repo
+### Step 8: Clone This Repository
 
 ```bash
 git clone https://github.com/ali-zahir/dotfiles.git /mnt/etc/nixos
 ```
 
-### 9. Get LUKS UUID
+### Step 9: Get Your LUKS UUID
 
 ```bash
 chmod +x /mnt/etc/nixos/scripts/get-luks-uuid.sh
 /mnt/etc/nixos/scripts/get-luks-uuid.sh
 ```
 
-Output:
-
+You'll see output like:
 ```
-/dev/nvme0n1p2: UUID="a1b2c3d4-e5f6-..." TYPE="crypto_LUKS"
+/dev/nvme0n1p2: UUID="a1b2c3d4-e5f6-7890-abcd-ef1234567890" TYPE="crypto_LUKS"
 ```
 
-### 10. Update Configuration
+Copy the UUID (the part in quotes).
+
+### Step 10: Update Configuration
 
 ```bash
 nano /mnt/etc/nixos/nixos/configuration.nix
 ```
 
-Find and replace `YOUR-LUKS-UUID-HERE`:
-
+Find this line:
 ```nix
-boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/a1b2c3d4-e5f6-...";
+device = "/dev/disk/by-uuid/YOUR-LUKS-UUID-HERE";
 ```
 
-### 11. Install
+Replace `YOUR-LUKS-UUID-HERE` with your actual UUID.
+
+### Step 11: Install
 
 ```bash
 cd /mnt/etc/nixos
 nixos-install --flake .#nixos
 ```
 
-Set root password when prompted.
+Set the root password when prompted.
 
-### 12. Reboot
+### Step 12: Reboot
 
 ```bash
 reboot
 ```
 
-Remove USB. Enter LUKS passphrase at boot.
+Remove the USB. Enter your LUKS passphrase when prompted.
 
----
+You now have a working NixOS system.
 
-## After First Boot
+## After Installation
 
-### Rebuild System
+### Rebuild After Changes
 
 ```bash
 sudo nixos-rebuild switch --flake /etc/nixos#nixos
-```
-
-### Rollback If Needed
-
-```bash
-sudo nixos-rebuild switch --rollback
 ```
 
 ### Update System
@@ -189,36 +198,35 @@ sudo nixos-rebuild switch --rollback
 sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade
 ```
 
----
+### Rollback If Something Breaks
 
-## TPM2 Auto-Unlock (No Password on Boot)
+```bash
+sudo nixos-rebuild switch --rollback
+```
 
-After your system is working with passphrase unlock, you can enable TPM2 auto-unlock.
+Or select a previous generation from the boot menu.
 
-### How It Works
+## TPM2 Auto-Unlock (Optional)
 
-- TPM2 stores a sealed secret
-- Secret unlocks LUKS automatically on boot
-- If anything changes (BIOS update, Secure Boot toggle), passphrase is required
-- Your passphrase **always works as fallback**
+By default, you'll type your LUKS passphrase every boot. TPM2 auto-unlock removes this step while keeping your disk encrypted.
 
-### Prerequisites
+How it works:
+- The TPM chip stores a secret tied to your system's boot state
+- If the system boots normally, the TPM releases the secret and unlocks the disk
+- If anything changes (BIOS update, different boot device), the TPM refuses and you use your passphrase instead
 
-- System boots successfully with LUKS passphrase
-- TPM2 chip present (most modern systems have this)
+Your passphrase always works as a fallback.
 
-### Step 1: Verify TPM2 Is Available
+### Enable TPM Auto-Unlock
 
+First, verify TPM is available:
 ```bash
 ls /dev/tpm*
 ```
 
-Should show `/dev/tpm0` or `/dev/tpmrm0`.
+You should see `/dev/tpm0` or `/dev/tpmrm0`.
 
-### Step 2: Enroll TPM2 Key
-
-Run this **once** after system is working:
-
+Enroll the TPM:
 ```bash
 sudo systemd-cryptenroll \
   --tpm2-device=auto \
@@ -226,49 +234,93 @@ sudo systemd-cryptenroll \
   /dev/disk/by-uuid/YOUR-LUKS-UUID
 ```
 
-- `--tpm2-pcrs=7` ties unlock to Secure Boot state
-- Enter your existing LUKS passphrase when prompted
+Replace `YOUR-LUKS-UUID` with your actual UUID. Enter your LUKS passphrase when prompted.
 
-### Step 3: Reboot & Test
-
+Reboot:
 ```bash
 reboot
 ```
 
-System should unlock automatically (no password prompt).
+The system should unlock automatically.
 
-### If TPM Unlock Fails
+### If Auto-Unlock Fails
 
-You'll see the passphrase prompt. Enter your password — system boots normally.
+You'll see the passphrase prompt. Enter your password and the system boots normally.
 
-This happens when:
-- BIOS/firmware was updated
-- Secure Boot state changed
-- Boot chain was modified
+This happens after:
+- BIOS/firmware updates
+- Secure Boot changes
+- Boot chain modifications
 
-After booting, re-enroll TPM if needed.
+To fix, re-enroll the TPM after booting:
+```bash
+sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/disk/by-uuid/YOUR-LUKS-UUID
+sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/disk/by-uuid/YOUR-LUKS-UUID
+```
 
-### Remove TPM Enrollment (If Needed)
+### Remove TPM Enrollment
 
 ```bash
 sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/disk/by-uuid/YOUR-LUKS-UUID
 ```
 
----
+## Dual-Boot with Windows
 
-## Dual-Boot Notes (Windows on Separate SSD)
-
+If you have Windows on a separate SSD:
 - Windows uses its own TPM keys (BitLocker)
 - NixOS uses its own LUKS TPM slot
-- They **do not interfere** with each other
-- No changes needed on the Windows side
-- Boot menu: use BIOS boot selector (F12/F8/etc.) or systemd-boot
+- They don't interfere with each other
+- Use your BIOS boot menu (F12/F8/etc.) to switch between them
 
----
+No changes needed on the Windows side.
+
+## Desktop Usage
+
+### i3 Key Bindings
+
+| Key | Action |
+|-----|--------|
+| `Alt+Return` | Open terminal |
+| `Alt+d` | App launcher (dmenu) |
+| `Alt+q` | Close window |
+| `Alt+f` | Fullscreen |
+| `Alt+h` | Split horizontal |
+| `Alt+v` | Split vertical |
+| `Alt+1-0` | Switch workspace |
+| `Alt+Shift+1-0` | Move window to workspace |
+| `Alt+Shift+s` | Screenshot (selection) |
+| `Alt+Tab` | Previous workspace |
+| `Alt+Shift+c` | Reload i3 config |
+| `Alt+Shift+r` | Restart i3 |
+| `Alt+[/]` | Brightness down/up |
+| `Alt+Shift+[/]` | Volume down/up |
+
+### Monitors
+
+Monitors are auto-detected on login. The script:
+- Sets the largest resolution display as primary
+- Rotates 2560x1080 ultrawide monitors vertically
+- Arranges others to the right
+
+To customize, edit `scripts/autorandr.sh`.
+
+### Shell Aliases
+
+| Alias | Command |
+|-------|---------|
+| `ls` | eza |
+| `ll` | eza -la |
+| `cat` | bat |
+| `rebuild` | sudo nixos-rebuild switch |
+| `update` | sudo nixos-rebuild switch --upgrade |
+| `copy` | copy to clipboard |
+| `p` | paste from clipboard |
 
 ## Recovery
 
-### Boot From Live USB
+### Boot from Live USB
+
+If you can't boot normally:
 
 ```bash
 cryptsetup open /dev/nvme0n1p2 cryptroot
@@ -277,48 +329,31 @@ mount /dev/nvme0n1p1 /mnt/boot
 nixos-enter
 ```
 
+Now you're in your installed system and can fix things.
+
 ### Reset TPM Enrollment
 
 ```bash
 sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/disk/by-uuid/YOUR-LUKS-UUID
 ```
 
-### Re-Enroll TPM After Changes
-
-```bash
-sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/disk/by-uuid/YOUR-LUKS-UUID
-sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/disk/by-uuid/YOUR-LUKS-UUID
-```
-
----
-
-## Key Bindings (i3)
-
-| Key | Action |
-|-----|--------|
-| `Alt+Return` | Terminal (kitty) |
-| `Alt+d` | Dmenu launcher |
-| `Alt+q` | Kill window |
-| `Alt+f` | Fullscreen |
-| `Alt+h/v` | Split horizontal/vertical |
-| `Alt+1-0` | Switch workspace |
-| `Alt+Shift+1-0` | Move to workspace |
-| `Alt+Shift+s` | Screenshot (selection) |
-| `Alt+Tab` | Previous workspace |
-| `Alt+Shift+c` | Reload i3 |
-| `Alt+Shift+r` | Restart i3 |
-| `Alt+r` | Resize mode |
-| `Alt+[/]` | Brightness -/+ |
-| `Alt+Shift+[/]` | Volume -/+ |
-
----
+Then re-enroll if desired.
 
 ## Secrets
 
+Copy the example file and add your secrets:
 ```bash
 cp .env.example ~/.secrets.env
 chmod 600 ~/.secrets.env
-nvim ~/.secrets.env
 ```
 
-Never commit `~/.secrets.env`!
+This file is sourced by zsh on login. Never commit it.
+
+## Customization
+
+- **Packages**: Edit `nixos/configuration.nix` (system-wide) or `nixos/home.nix` (user)
+- **i3 config**: Edit the `xsession.windowManager.i3` section in `home.nix`
+- **Shell**: Edit `programs.zsh` in `home.nix`
+- **Monitors**: Edit `scripts/autorandr.sh`
+
+After changes, run `rebuild` to apply.
