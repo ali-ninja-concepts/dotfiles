@@ -15,14 +15,16 @@
     executable = true;
   };
 
+  home.file."bin/mybar" = {
+    source = ../bin/mybar;
+    executable = true;
+  };
+
   home.sessionPath = [ "$HOME/bin" ];
 
   home.packages = with pkgs; [
-    rofi
     dunst
-    polybar
     clipcat
-    i3status
     i3lock
     dmenu
     feh
@@ -53,7 +55,6 @@
 
       keybindings = let
         mod = "Mod1";
-        refresh = "killall -SIGUSR1 i3status";
       in {
         "${mod}+Return" = "exec kitty";
         "${mod}+q" = "kill";
@@ -148,13 +149,15 @@
           notification = false;
         }
         { command = "nm-applet"; notification = false; }
+        { command = "dunst"; notification = false; }
         { command = "clipcatd"; notification = false; }
+        { command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"; notification = false; }
         { command = "xss-lock --transfer-sleep-lock -- i3lock --nofork"; notification = false; }
       ];
 
       bars = [
         {
-          statusCommand = "${pkgs.i3status}/bin/i3status";
+          statusCommand = "$HOME/bin/mybar";
         }
       ];
     };
