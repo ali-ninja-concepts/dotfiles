@@ -46,7 +46,8 @@
     };
   };
 
-  services.displayManager.defaultSession = "none+i3";
+  services.xserver.displayManager.lightdm.enable = true;
+  services.displayManager.defaultSession = "i3";
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -62,10 +63,8 @@
     enable32Bit = true;
   };
 
-  services.displayManager.autoLogin = {
-    enable = true;
-    user = "ali-zahir";
-  };
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "ali-zahir";
 
   # Audio via PipeWire (modern replacement for PulseAudio)
   services.pipewire = {
