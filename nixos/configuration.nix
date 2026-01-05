@@ -67,8 +67,14 @@
     user = "ali-zahir";
   };
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # Audio via PipeWire (modern replacement for PulseAudio)
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+  };
 
   # PostgreSQL 16 for local development ONLY
   # Uses trust auth on localhost - do not expose externally
