@@ -10,6 +10,13 @@
     executable = true;
   };
 
+  home.file."bin/get-luks-uuid" = {
+    source = ../scripts/get-luks-uuid.sh;
+    executable = true;
+  };
+
+  home.sessionPath = [ "$HOME/bin" ];
+
   home.packages = with pkgs; [
     rofi
     dunst

@@ -8,6 +8,18 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/YOUR-LUKS-UUID-HERE";
+    preLVM = true;
+    allowDiscards = true;
+  };
+
+  security.tpm2 = {
+    enable = true;
+    pkcs11.enable = true;
+    tctiEnvironment.enable = true;
+  };
+
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
@@ -61,7 +73,7 @@
   users.users.ali-zahir = {
     isNormalUser = true;
     description = "Ali Zahir";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "tss" ];
     shell = pkgs.zsh;
   };
 
@@ -100,6 +112,8 @@
 
     xorg.xrandr
     xorg.xinput
+
+    tpm2-tools
   ];
 
   fonts.packages = with pkgs; [
