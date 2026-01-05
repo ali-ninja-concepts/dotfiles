@@ -140,7 +140,7 @@
 
     # File management
     thunar
-    xfce.thunar-volman
+    thunar-volman
     gvfs
 
     # Desktop essentials (no DE)
@@ -151,7 +151,7 @@
     gnome-keyring
     libsecret
     gsimplecal
-    xfce.xfce4-taskmanager
+    xfce4-taskmanager
 
     xorg.xrandr
     xorg.xinput
