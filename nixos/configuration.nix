@@ -9,7 +9,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/disk/by-uuid/YOUR-LUKS-UUID-HERE";
+    device = "/dev/disk/by-uuid/27cc1d8e-916e-4704-895f-417b48423465";
     preLVM = true;
     allowDiscards = true;
   };
