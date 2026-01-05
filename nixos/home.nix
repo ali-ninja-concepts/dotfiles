@@ -28,7 +28,6 @@
     feh
     maim
     xsel
-    parcellite
     brightnessctl
     xss-lock
     pavucontrol
@@ -149,7 +148,7 @@
           notification = false;
         }
         { command = "nm-applet"; notification = false; }
-        { command = "parcellite"; notification = false; }
+        { command = "clipcatd"; notification = false; }
         { command = "xss-lock --transfer-sleep-lock -- i3lock --nofork"; notification = false; }
       ];
 
