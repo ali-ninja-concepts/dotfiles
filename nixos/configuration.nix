@@ -47,7 +47,7 @@
   };
 
   services.xserver.displayManager.lightdm.enable = true;
-  services.displayManager.defaultSession = "i3";
+  services.displayManager.defaultSession = "none+i3";
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -133,6 +133,15 @@
 
     pavucontrol
     networkmanagerapplet
+
+    # File management
+    thunar
+    xfce.thunar-volman
+    gvfs
+
+    # Desktop essentials (no DE)
+    lxappearance
+    polkit_gnome
 
     xorg.xrandr
     xorg.xinput
