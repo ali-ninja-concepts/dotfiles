@@ -40,13 +40,13 @@
       ];
     };
 
-    displayManager.defaultSession = "none+i3";
-
     xkb = {
       layout = "us";
       variant = "";
     };
   };
+
+  services.displayManager.defaultSession = "none+i3";
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -148,7 +148,8 @@
     fira-code
     fira-code-symbols
     jetbrains-mono
-    (nerdfonts.override { fonts = [ "FiraCode" "JetBrainsMono" ]; })
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

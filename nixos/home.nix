@@ -46,7 +46,7 @@
 
       focus = {
         followMouse = false;
-        forceWrapping = true;
+        wrapping = "force";
       };
 
       floating.modifier = "Mod1";
@@ -217,7 +217,7 @@
       EDITOR = "nvim";
     };
 
-    initExtra = ''
+    initContent = ''
       # NVM
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -229,8 +229,8 @@
 
   programs.git = {
     enable = true;
-    userName = "Ali Zahir";
-    userEmail = "ali@ninjaconcepts.ai";
+    settings.user.name = "Ali Zahir";
+    settings.user.email = "ali@ninjaconcepts.ai";
   };
 
   programs.neovim = {
