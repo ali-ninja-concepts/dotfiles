@@ -104,6 +104,10 @@
 
   programs.zsh.enable = true;
 
+  # Keyring for secrets (required by mybar)
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.lightdm.enableGnomeKeyring = true;
+
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
@@ -142,6 +146,12 @@
     # Desktop essentials (no DE)
     lxappearance
     polkit_gnome
+
+    # mybar dependencies
+    gnome-keyring
+    libsecret
+    gsimplecal
+    xfce.xfce4-taskmanager
 
     xorg.xrandr
     xorg.xinput
