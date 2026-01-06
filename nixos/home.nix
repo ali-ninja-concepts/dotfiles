@@ -6,9 +6,58 @@
   home.stateVersion = "24.05";
 
   xdg.configFile."autorandr.sh" = {
-    source = ../scripts/autorandr.sh;
-    executable = true;
+     source = ../scripts/autorandr.sh;
+     executable = true;
+   };
+
+  xdg.configFile."clipcat/clipcatd.toml" = {
+    force = true;
+    text = ''
+    daemonize = true
+    max_history = 50
+    synchronize_selection_with_clipboard = true
+    history_file_path = "/home/ali-zahir/.cache/clipcat/clipcatd-history"
+
+    [log]
+    emit_journald = true
+    emit_stdout = false
+    emit_stderr = false
+    level = "INFO"
+
+    [watcher]
+    enable_clipboard = true
+    enable_primary = true
+    filter_text_min_length = 1
+    filter_text_max_length = 20000000
+    capture_image = false
+
+    [grpc]
+    enable_http = true
+    enable_local_socket = true
+    host = "127.0.0.1"
+    port = 45045
+
+    [desktop_notification]
+    enable = true
+    icon = "accessories-clipboard"
+    timeout_ms = 2000
+  '';
   };
+
+  xdg.configFile."clipcat/clipcat-menu.toml" = {
+    force = true;
+    text = ''
+    finder = "dmenu"
+    preview_length = 80
+
+    [dmenu]
+    line_length = 100
+    menu_length = 30
+    menu_prompt = "Clipcat"
+    extra_arguments = []
+  '';
+  };
+
 
   home.file."bin/get-luks-uuid" = {
     source = ../scripts/get-luks-uuid.sh;
@@ -17,6 +66,11 @@
 
   home.file."bin/mybar" = {
     source = ../bin/mybar;
+    executable = true;
+  };
+
+  home.file."bin/dmenu-recent" = {
+    source = ../scripts/dmenu-recent.sh;
     executable = true;
   };
 
@@ -42,7 +96,13 @@
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
   };
 
-
+  # Load secrets before X session starts
+  xsession = {
+    enable = true;
+    initExtra = ''
+      [ -f ~/.secrets.env ] && source ~/.secrets.env
+    '';
+  };
 
   xsession.windowManager.i3 = {
     enable = true;
@@ -67,7 +127,8 @@
       in {
         "${mod}+Return" = "exec kitty";
         "${mod}+q" = "kill";
-        "${mod}+d" = "exec dmenu_run";
+        "${mod}+d" = "exec dmenu-recent";
+        "${mod}+Control+h" = "exec clipcat-menu";
         
         "${mod}+j" = "focus left";
         "${mod}+k" = "focus down";
@@ -127,6 +188,7 @@
         "${mod}+Shift+c" = "reload";
         "${mod}+Shift+r" = "restart";
         "${mod}+r" = "mode resize";
+        "${mod}+x" = "mode \"(l)ock (e)xit (s)uspend (r)eboot s(h)utdown\"";
         
         "${mod}+Shift+bracketright" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%";
         "${mod}+Shift+bracketleft" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%";
@@ -146,6 +208,16 @@
           "Down" = "resize grow height 10 px or 10 ppt";
           "Up" = "resize shrink height 10 px or 10 ppt";
           "Right" = "resize grow width 10 px or 10 ppt";
+          "Return" = "mode default";
+          "Escape" = "mode default";
+        };
+
+        "(l)ock (e)xit (s)uspend (r)eboot s(h)utdown" = {
+          "l" = "exec --no-startup-id xset s activate";
+          "e" = "exit";
+          "s" = "exec --no-startup-id systemctl suspend";
+          "r" = "exec --no-startup-id systemctl reboot";
+          "h" = "exec --no-startup-id systemctl poweroff";
           "Return" = "mode default";
           "Escape" = "mode default";
         };
@@ -239,7 +311,7 @@
       
       # Secrets
       [ -f ~/.secrets.env ] && source ~/.secrets.env
-    '';
+  '';
   };
 
   programs.git = {
