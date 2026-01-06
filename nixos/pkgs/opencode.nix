@@ -1,61 +1,40 @@
-# Add this to your configuration.nix or create a separate file like ~/.config/nixpkgs/opencode.nix
-
-{ pkgs }:
+{ pkgs, lib, stdenv, fetchurl, makeWrapper }:
 
 let
-  version = "1.0.180"; # Check https://github.com/anomalyco/opencode/releases for latest
+  version = "1.0.180";
   
-  # Determine the right binary for your system
-  system = pkgs.stdenv.hostPlatform.system;
+  system = stdenv.hostPlatform.system;
   
   sources = {
     "x86_64-linux" = {
       url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-      sha256 = "sha256-0Pt+AOzcsGedeWOWgJuHJapvWJVcefql/FbWoHI9vr0="; # Leave empty for now, Nix will tell you the correct hash
-    };
-    "aarch64-linux" = {
-      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-linux-arm64.tar.gz";
-      sha256 = "";
-    };
-    "x86_64-darwin" = {
-      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-darwin-x64.zip";
-      sha256 = "";
-    };
-    "aarch64-darwin" = {
-      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-darwin-arm64.zip";
-      sha256 = "";
+      sha256 = "sha256-0Pt+AOzcsGedeWOWgJuHJapvWJVcefql/FbWoHI9vr0=";
     };
   };
 
-  src = pkgs.fetchurl (sources.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchurl (sources.${system} or (throw "Unsupported system: ${system}"));
 
-in pkgs.stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "opencode";
-  inherit version;
-  inherit src;
+  inherit version src;
 
-  nativeBuildInputs = with pkgs; [
-    autoPatchelfHook
-    unzip
-  ];
-
-  buildInputs = with pkgs; [
-    stdenv.cc.cc.lib
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   sourceRoot = ".";
 
+  dontBuild = true;
+  dontStrip = true;
+
   installPhase = ''
-    runHook preInstall
     mkdir -p $out/bin
-    cp opencode $out/bin/
-    chmod +x $out/bin/opencode
-    runHook postInstall
+    cp opencode $out/bin/.opencode-unwrapped
+    makeWrapper $out/bin/.opencode-unwrapped $out/bin/opencode \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "AI coding agent";
     homepage = "https://opencode.ai";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" ];
   };
 }
