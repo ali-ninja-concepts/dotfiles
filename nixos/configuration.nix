@@ -113,8 +113,9 @@
 
   environment.systemPackages = with pkgs; [
     git
-    neovim
-    wget
+     neovim
+     nixd
+     wget
     curl
     kitty
     firefox
