@@ -33,7 +33,17 @@
     brightnessctl
     xss-lock
     pavucontrol
+    nodejs_20
+    slack
   ];
+
+  home.sessionVariables = {
+    NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+  };
+
+   programs.zsh.initExtra = ''
+     export PATH="$HOME/.npm-global/bin:$PATH"
+   '';
 
   xsession.windowManager.i3 = {
     enable = true;

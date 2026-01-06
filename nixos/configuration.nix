@@ -103,6 +103,7 @@
   };
 
   programs.zsh.enable = true;
+  programs.nix-ld.enable = true;
 
   # Keyring for secrets (required by mybar)
   services.gnome.gnome-keyring.enable = true;
@@ -157,7 +158,10 @@
     xorg.xinput
 
     tpm2-tools
-  ];
+   
+    # Custom packages
+    (pkgs.callPackage ./pkgs/opencode.nix {})
+ ];
 
   fonts.packages = with pkgs; [
     noto-fonts
