@@ -112,7 +112,7 @@
       
       fonts = {
         names = [ "JetBrains Mono" ];
-        size = 12.0;
+        size = 14.0;
       };
 
       focus = {
@@ -239,6 +239,10 @@
       bars = [
         {
           statusCommand = "$HOME/bin/mybar";
+          fonts = {
+            names = [ "JetBrains Mono" ];
+            size = 14.0;
+          };
         }
       ];
     };
