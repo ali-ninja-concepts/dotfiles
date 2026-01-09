@@ -118,8 +118,8 @@
      wget
     curl
     kitty
-    firefox
     google-chrome
+    jq
 
     feh
     maim
@@ -136,6 +136,8 @@
     nodejs_20
     bun
     go
+    pnpm
+    dbgate
 
     pavucontrol
     networkmanagerapplet
@@ -162,6 +164,7 @@
    
     # Custom packages
     (pkgs.callPackage ./pkgs/opencode.nix {})
+
  ];
 
   fonts.packages = with pkgs; [

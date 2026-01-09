@@ -96,6 +96,11 @@
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
   };
 
+
+   programs.zsh.sessionVariables = {
+    PATH = "$HOME/.local/bin:$PATH";
+  };
+
   # Load secrets before X session starts
   xsession = {
     enable = true;
