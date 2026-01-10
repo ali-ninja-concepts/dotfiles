@@ -120,12 +120,14 @@
     kitty
     google-chrome
     jq
+    onlyoffice-desktopeditors
 
     feh
     maim
     xsel
     brightnessctl
     xss-lock
+    arandr
 
     eza
     bat
