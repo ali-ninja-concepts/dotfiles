@@ -22,10 +22,8 @@
   services.xserver.displayManager.lightdm.enable = true;
   services.displayManager.defaultSession = "none+i3";
 
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "ali-zahir";
-
   # Keyring for secrets (required by mybar)
+  # Unlocks automatically when you enter login password
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.lightdm.enableGnomeKeyring = true;
 }
