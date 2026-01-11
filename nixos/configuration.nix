@@ -142,6 +142,7 @@
     dbgate
 
     pavucontrol
+    pulseaudio # provides pactl CLI
     networkmanagerapplet
 
     # File management
