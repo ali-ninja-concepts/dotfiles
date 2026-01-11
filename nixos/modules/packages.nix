@@ -34,6 +34,7 @@
     fzf
     ripgrep
     fd
+    yt-dlp
 
     # Development
     nodejs_20

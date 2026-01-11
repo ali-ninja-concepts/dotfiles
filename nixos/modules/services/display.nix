@@ -19,7 +19,10 @@
     };
   };
 
-  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+    background = "#000000";
+  };
   services.displayManager.defaultSession = "none+i3";
 
   # Keyring for secrets (required by mybar)
