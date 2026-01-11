@@ -32,17 +32,32 @@ After installation:
 
 ```
 dotfiles/
-├── flake.nix               # Entry point (repo root)
+├── flake.nix                     # Entry point (repo root)
 ├── flake.lock
+├── STATE.md                      # Stateful directories (not managed by Nix)
+├── hardware-configuration.nix    # Generated per-machine (not in repo)
 ├── nixos/
-│   ├── configuration.nix   # System config (packages, drivers, users)
-│   ├── home.nix            # User config (i3, shell, apps)
-│   └── hardware-configuration.nix  # Generated per-machine (not in repo)
-├── config/                 # App configs (kitty, nvim)
+│   ├── configuration.nix         # System module imports
+│   ├── home.nix                  # Home module imports
+│   ├── modules/
+│   │   ├── system/               # Boot, NVIDIA, audio, networking, nix settings
+│   │   ├── services/             # PostgreSQL, Docker, display/i3
+│   │   ├── users.nix
+│   │   ├── packages.nix
+│   │   └── fonts.nix
+│   ├── home/
+│   │   ├── i3.nix                # i3 keybindings, startup, bars
+│   │   ├── picom.nix             # Compositor
+│   │   ├── shell.nix             # Zsh config, aliases
+│   │   ├── programs.nix          # Kitty, git, neovim, direnv
+│   │   ├── packages.nix          # User packages
+│   │   └── services.nix          # Clipcat, scripts
+│   └── pkgs/                     # Custom package definitions
+├── config/                       # App configs (nvim)
 ├── scripts/
-│   ├── autorandr.sh        # Auto-detect and arrange monitors
-│   └── get-luks-uuid.sh    # Helper to find your LUKS UUID
-└── .env.example            # Template for secrets
+│   ├── autorandr.sh              # Auto-detect and arrange monitors
+│   └── get-luks-uuid.sh          # Helper to find your LUKS UUID
+└── .env.example                  # Template for secrets
 ```
 
 > **Note**: `flake.nix` is at the repository root. This follows the official NixOS flake layout.
@@ -163,7 +178,7 @@ Copy the UUID (the part in quotes).
 ### Step 10: Update Configuration
 
 ```bash
-nano /mnt/etc/nixos/nixos/configuration.nix
+nano /mnt/etc/nixos/nixos/modules/system/boot.nix
 ```
 
 Find this line:
@@ -359,9 +374,22 @@ This file is sourced by zsh on login. Never commit it.
 
 ## Customization
 
-- **Packages**: Edit `nixos/configuration.nix` (system-wide) or `nixos/home.nix` (user)
-- **i3 config**: Edit the `xsession.windowManager.i3` section in `home.nix`
-- **Shell**: Edit `programs.zsh` in `home.nix`
+- **System packages**: Edit `nixos/modules/packages.nix`
+- **User packages**: Edit `nixos/home/packages.nix`
+- **i3 config**: Edit `nixos/home/i3.nix`
+- **Shell/aliases**: Edit `nixos/home/shell.nix`
+- **NVIDIA/GPU**: Edit `nixos/modules/system/nvidia.nix`
 - **Monitors**: Edit `scripts/autorandr.sh`
 
 After changes, run `rebuild` to apply.
+
+## Maintenance
+
+The system automatically:
+- Runs garbage collection monthly (removes generations older than 30 days)
+- Optimizes the Nix store by deduplicating files
+
+Check timers with:
+```bash
+systemctl list-timers | grep nix
+```
