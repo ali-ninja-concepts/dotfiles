@@ -19,6 +19,7 @@
     gvfs
     lxappearance
     polkit_gnome
+    obsidian
 
     # i3 utilities
     feh
