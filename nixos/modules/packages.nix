@@ -10,6 +10,7 @@
     curl
     kitty
     jq
+    ouch
 
     # Desktop
     google-chrome
@@ -44,6 +45,7 @@
     go
     pnpm
     dbgate
+    redis
 
     # Audio
     pavucontrol
