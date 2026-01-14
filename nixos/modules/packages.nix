@@ -20,6 +20,7 @@
     lxappearance
     polkit_gnome
     obsidian
+    postman
 
     # i3 utilities
     feh
