@@ -11,6 +11,7 @@
     xsel
     brightnessctl
     xss-lock
+    xidlehook
     pavucontrol
     nodejs_20
     slack

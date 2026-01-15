@@ -11,6 +11,7 @@
     kitty
     jq
     ouch
+    tmux
 
     # Desktop
     google-chrome
@@ -64,7 +65,7 @@
 
     # Security
     tpm2-tools
-
+    bitwarden-desktop
     # Custom packages
     (pkgs.callPackage ../pkgs/opencode.nix {})
   ];

@@ -1,6 +1,17 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  services.xidlehook = {
+    enable = true;
+    not-when-fullscreen = true;
+    not-when-audio = true;
+    timers = [
+      {
+        delay = 900;
+        command = "${pkgs.i3lock}/bin/i3lock -c 000000";
+      }
+    ];
+  };
   xdg.configFile."autorandr.sh" = {
     source = ../../scripts/autorandr.sh;
     executable = true;
