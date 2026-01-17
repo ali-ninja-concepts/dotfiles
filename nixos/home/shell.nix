@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.zsh = {
@@ -7,10 +7,23 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
+    plugins = [
+      {
+        name = "zsh-interactive-cd";
+        file = "zsh-interactive-cd.plugin.zsh";
+        src = pkgs.fetchFromGitHub {
+          owner = "mrjohannchang";
+          repo = "zsh-interactive-cd";
+          rev = "master";
+          sha256 = "j23Ew18o7i/7dLlrTu0/54+6mbY8srsptfrDP/9BI/Q=";
+        };
+      }
+    ];
+
     oh-my-zsh = {
       enable = true;
       theme = "dpoggi";
-      plugins = [ "git" ];
+      plugins = [ "git" "kitty" "zoxide" "colored-man-pages" "history-substring-search" "docker" "nvm" "npm" "tmux" ];
     };
 
     shellAliases = {

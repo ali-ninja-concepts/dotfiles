@@ -16,6 +16,7 @@
     nodejs_20
     slack
     code-cursor
+    zoxide
   ];
 
   home.sessionVariables = {
