@@ -23,6 +23,7 @@
     polkit_gnome
     obsidian
     postman
+    spotify
 
     # i3 utilities
     feh
