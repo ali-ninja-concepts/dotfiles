@@ -30,4 +30,13 @@
     enableZshIntegration = true;
     nix-direnv.enable = true;
   };
+
+  # SSH client with keepalive to prevent connection timeouts
+  programs.ssh = {
+    enable = true;
+    matchBlocks."*" = {
+      serverAliveInterval = 60;  # Send keepalive every 60 seconds
+      serverAliveCountMax = 3;   # Disconnect after 3 missed keepalives
+    };
+  };
 }
