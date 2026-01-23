@@ -46,8 +46,9 @@
     bun
     go
     pnpm
+    python3
+    uv
     dbgate
-    redis
 
     # Audio
     pavucontrol
