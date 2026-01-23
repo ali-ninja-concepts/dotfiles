@@ -12,6 +12,7 @@
     ./modules/services/docker.nix
     ./modules/services/display.nix
     ./modules/services/clamav.nix
+    ./modules/services/ssh.nix
     ./modules/users.nix
     ./modules/packages.nix
     ./modules/fonts.nix
