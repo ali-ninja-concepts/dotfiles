@@ -40,6 +40,7 @@
     ripgrep
     fd
     yt-dlp
+    ffmpeg
 
     # Development
     nodejs_20
