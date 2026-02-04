@@ -12,6 +12,7 @@
     jq
     ouch
     tmux
+    ncdu
 
     # Desktop
     google-chrome
@@ -50,6 +51,7 @@
     python3
     uv
     dbgate
+    flutter
 
     # Audio
     pavucontrol
