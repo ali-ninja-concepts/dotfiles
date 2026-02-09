@@ -17,6 +17,7 @@
     slack
     code-cursor
     zoxide
+    simple-http-server
   ];
 
   home.sessionVariables = {
