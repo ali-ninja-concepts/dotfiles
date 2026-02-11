@@ -71,6 +71,10 @@
     # Security
     tpm2-tools
     bitwarden-desktop
+
+    # VPN
+    openvpn
+
     # Custom packages
     (pkgs.callPackage ../pkgs/opencode.nix {})
   ];
