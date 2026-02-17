@@ -18,6 +18,7 @@
     code-cursor
     zoxide
     simple-http-server
+    gh
   ];
 
   home.sessionVariables = {
