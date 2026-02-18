@@ -15,7 +15,6 @@
     settings = {
       corner-radius = 0;
       detect-rounded-corners = true;
-      glx-no-stencil = true;
       glx-copy-from-front = false;
       use-damage = true;
       xrender-sync-fence = true;

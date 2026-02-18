@@ -65,8 +65,8 @@
     xfce4-taskmanager
 
     # X11
-    xorg.xrandr
-    xorg.xinput
+    xrandr
+    xinput
 
     # Security
     tpm2-tools

@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.kitty = {
@@ -31,9 +31,35 @@
     nix-direnv.enable = true;
   };
 
+  programs.tmux = {
+    enable = true;
+    mouse = true;                  # click to switch panes/windows, scroll works
+    baseIndex = 1;                 # windows start at 1, not 0
+    escapeTime = 0;                # no delay after pressing Escape
+    historyLimit = 10000;          # scrollback buffer
+    terminal = "tmux-256color";
+    plugins = with pkgs.tmuxPlugins; [
+      resurrect                    # Ctrl+b Ctrl+s to save, Ctrl+b Ctrl+r to restore
+      continuum                    # auto-saves sessions every 15 min
+    ];
+    extraConfig = ''
+      # Auto-restore saved sessions
+      set -g @continuum-restore 'on'
+
+      # Easier window creation: Ctrl+b Enter (close to what you're used to)
+      bind Enter new-window
+
+      # Status bar - keep it simple
+      set -g status-style 'bg=default,fg=white'
+      set -g status-left '#[fg=green]#S '
+      set -g status-right ''''
+    '';
+  };
+
   # SSH client with keepalive to prevent connection timeouts
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks."*" = {
       serverAliveInterval = 60;  # Send keepalive every 60 seconds
       serverAliveCountMax = 3;   # Disconnect after 3 missed keepalives
