@@ -19,6 +19,7 @@
     zoxide
     simple-http-server
     gh
+    supabase-cli
   ];
 
   home.sessionVariables = {

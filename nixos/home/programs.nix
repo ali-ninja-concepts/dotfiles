@@ -64,5 +64,10 @@
       serverAliveInterval = 60;  # Send keepalive every 60 seconds
       serverAliveCountMax = 3;   # Disconnect after 3 missed keepalives
     };
+    matchBlocks."personal-github" = {
+      hostname = "github.com";
+      identityFile = "~/.ssh/id_ed25519_personal";
+      identitiesOnly = true;
+    };
   };
 }
