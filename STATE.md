@@ -18,6 +18,10 @@ Back these up separately.
 - `~/.npm-global/` - Global npm packages
 - `~/.nvm/` - Node version manager
 
+## Backup Secrets
+- `/root/.secrets/restic-password` - Restic encryption passphrase (CRITICAL — if lost, backups are unrecoverable)
+- `/root/.secrets/restic-b2-env` - Backblaze B2 API credentials
+
 ## System State
 - `/var/lib/postgresql/` - PostgreSQL databases
 - `/var/lib/docker/` - Docker images and volumes

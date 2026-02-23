@@ -14,6 +14,7 @@
     ./modules/services/clamav.nix
     ./modules/services/ssh.nix
     ./modules/services/tailscale.nix
+    ./modules/services/restic.nix
     ./modules/users.nix
     ./modules/packages.nix
     ./modules/fonts.nix

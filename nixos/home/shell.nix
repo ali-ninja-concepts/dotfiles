@@ -34,6 +34,10 @@
       p = "xsel --clipboard --output";
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
       update = "sudo nixos-rebuild switch --flake /etc/nixos#nixos --upgrade";
+      backup = "sudo systemctl start restic-backups-system.service";
+      backup-status = "sudo systemctl status restic-backups-system.service";
+      backup-logs = "journalctl -u restic-backups-system.service -e";
+      backup-snapshots = "sudo restic -r s3:s3.us-east-005.backblazeb2.com/zai-nix snapshots";
     };
 
     sessionVariables = {
