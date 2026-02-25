@@ -20,6 +20,7 @@
     simple-http-server
     gh
     supabase-cli
+    stripe-cli
   ];
 
   home.sessionVariables = {
