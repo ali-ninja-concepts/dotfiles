@@ -89,8 +89,8 @@
 
         "${mod}+Shift+bracketright" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%";
         "${mod}+Shift+bracketleft" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%";
-        "${mod}+bracketleft" = "exec --no-startup-id brightnessctl set 10%-";
-        "${mod}+bracketright" = "exec --no-startup-id brightnessctl set +10%";
+        "${mod}+bracketleft" = "exec --no-startup-id /etc/nixos/scripts/ddcutil-brightness.sh -";
+        "${mod}+bracketright" = "exec --no-startup-id /etc/nixos/scripts/ddcutil-brightness.sh +";
 
         "${mod}+Shift+s" = "exec maim -s ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png";
       };

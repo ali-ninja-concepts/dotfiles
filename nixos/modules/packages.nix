@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  hardware.i2c.enable = true;
+
   environment.systemPackages = with pkgs; [
     # Core
     git
@@ -31,6 +33,7 @@
     maim
     xsel
     brightnessctl
+    ddcutil
     xss-lock
     arandr
 
