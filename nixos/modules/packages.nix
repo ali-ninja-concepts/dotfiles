@@ -27,6 +27,7 @@
     obsidian
     postman
     spotify
+    rpi-imager
 
     # i3 utilities
     feh
@@ -45,6 +46,7 @@
     fd
     yt-dlp
     ffmpeg
+    nmap
 
     # Development
     nodejs_20
