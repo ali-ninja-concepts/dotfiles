@@ -15,6 +15,7 @@
     ./modules/services/ssh.nix
     ./modules/services/tailscale.nix
     ./modules/services/restic.nix
+    ./modules/services/flatpak.nix
     ./modules/users.nix
     ./modules/packages.nix
     ./modules/fonts.nix
