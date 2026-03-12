@@ -57,6 +57,8 @@
     uv
     dbgate
     flutter
+    jdk
+    maven
 
     # Audio
     pavucontrol
