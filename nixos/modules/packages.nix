@@ -47,6 +47,7 @@
     yt-dlp
     ffmpeg
     nmap
+    dnsutils  # dig, nslookup, host
 
     # Development
     nodejs_20
