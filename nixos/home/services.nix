@@ -8,7 +8,11 @@
     timers = [
       {
         delay = 900;
-        command = "${pkgs.i3lock}/bin/i3lock -c 000000";
+        command = "${pkgs.pulseaudio}/bin/pactl list sink-inputs short | grep -q RUNNING || ${pkgs.i3lock}/bin/i3lock -c 000000";
+      }
+      {
+        delay = 1800;
+        command = "${pkgs.pulseaudio}/bin/pactl list sink-inputs short | grep -q RUNNING || systemctl suspend";
       }
     ];
   };
