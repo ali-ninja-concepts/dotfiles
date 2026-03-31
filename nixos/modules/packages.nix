@@ -85,5 +85,6 @@
 
     # Custom packages
     (pkgs.callPackage ../pkgs/opencode.nix {})
+    (pkgs.callPackage ../pkgs/sidecar.nix {})
   ];
 }
