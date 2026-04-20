@@ -8,6 +8,7 @@
     ./modules/system/audio.nix
     ./modules/system/networking.nix
     ./modules/system/nix.nix
+    ./modules/system/zram.nix
     ./modules/services/postgres.nix
     ./modules/services/docker.nix
     ./modules/services/display.nix
