@@ -21,6 +21,7 @@
     gh
     supabase-cli
     stripe-cli
+    awscli2
   ];
 
   home.sessionVariables = {
