@@ -1,6 +1,25 @@
 { pkgs, ... }:
 
+let
+  # Launch kitty into a tmux session: attach to the first unattached
+  # "kitty-N" session, or create the next free one. Combined with
+  # tmux-continuum, this gives reboot-surviving shells per kitty window.
+  kitty-tmux = pkgs.writeShellScriptBin "kitty-tmux" ''
+    set -u
+    TMUX_BIN=${pkgs.tmux}/bin/tmux
+    i=1
+    while "$TMUX_BIN" has-session -t "kitty-$i" 2>/dev/null; do
+      if [ -z "$("$TMUX_BIN" list-clients -t "kitty-$i" 2>/dev/null)" ]; then
+        exec "$TMUX_BIN" attach-session -t "kitty-$i"
+      fi
+      i=$((i+1))
+    done
+    exec "$TMUX_BIN" new-session -s "kitty-$i"
+  '';
+in
 {
+  home.packages = [ kitty-tmux ];
+
   programs.kitty = {
     enable = true;
     settings = {
@@ -8,6 +27,7 @@
       font_size = 12;
       enable_audio_bell = false;
       copy_on_select = "clipboard";
+      shell = "${kitty-tmux}/bin/kitty-tmux";
     };
   };
 
