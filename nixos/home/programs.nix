@@ -67,6 +67,9 @@ in
       # Auto-restore saved sessions
       set -g @continuum-restore 'on'
 
+      # Pass terminal focus events through to apps (Claude Code, vim, etc.)
+      set -g focus-events on
+
       # Easier window creation: Ctrl+b Enter (close to what you're used to)
       bind Enter new-window
 
