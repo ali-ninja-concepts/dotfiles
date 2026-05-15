@@ -60,6 +60,8 @@
     flutter
     jdk
     maven
+    gcc
+    gnumake
 
     # Audio
     pavucontrol
