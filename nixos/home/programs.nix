@@ -33,6 +33,7 @@ in
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     settings.user.name = "Ali Zahir";
     settings.user.email = "ali@ninjaconcepts.ai";
   };
