@@ -83,4 +83,9 @@
     source = ../../scripts/dmenu-recent.sh;
     executable = true;
   };
+
+  home.file."bin/clipcat-pick" = {
+    source = ../../scripts/clipcat-pick.sh;
+    executable = true;
+  };
 }

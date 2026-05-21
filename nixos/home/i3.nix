@@ -25,7 +25,7 @@
         "${mod}+Return" = "exec kitty";
         "${mod}+q" = "kill";
         "${mod}+d" = "exec dmenu-recent";
-        "${mod}+Control+h" = "exec clipcat-menu";
+        "${mod}+Control+h" = "exec clipcat-pick";
 
         "${mod}+j" = "focus left";
         "${mod}+k" = "focus down";
