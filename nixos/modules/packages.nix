@@ -15,6 +15,7 @@
     ouch
     tmux
     ncdu
+    sqlite
 
     # Desktop
     google-chrome
@@ -88,5 +89,6 @@
     # Custom packages
     (pkgs.callPackage ../pkgs/opencode.nix {})
     (pkgs.callPackage ../pkgs/sidecar.nix {})
+    (pkgs.callPackage ../pkgs/pi { })
   ];
 }

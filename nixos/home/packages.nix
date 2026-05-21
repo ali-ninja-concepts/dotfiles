@@ -22,6 +22,7 @@
     supabase-cli
     stripe-cli
     awscli2
+    turso-cli
     vlc
   ];
 
