@@ -14,11 +14,11 @@
 
 buildNpmPackage rec {
   pname = "pi-coding-agent";
-  version = "0.75.4";
+  version = "0.75.5";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@earendil-works/pi-coding-agent/-/pi-coding-agent-${version}.tgz";
-    hash = "sha512-Fb+FRo08b5H9pYKbQJ708/5OKL0+K/yclhfCMEhrBzSPTZZ4c85nY1YsBo4qwL20ohBMlBezHMRuHzcJ1ylEoQ==";
+    hash = "sha512-O3CCQDYy28D4uwtP6zZkdEwzHN6X22v49Sb0+SZTC7x37V/YfmogrWPiaFoWeoc2hmdKhSATI7ZAK5bQbJG5NA==";
   };
 
   # npm tarballs unpack to package/
@@ -38,7 +38,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-mwHYCt5MkSQVVH3e10vdveUK77/DsYg/jkQpvyJ096E=";
+  npmDepsHash = "sha256-Sd+ELuDrFbVnOyhhfa533ZJ0A1MZFmJ/w0/aGJJuqsc=";
 
   # The published tarball already contains the compiled dist/.
   dontNpmBuild = true;
