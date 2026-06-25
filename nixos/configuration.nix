@@ -17,6 +17,7 @@
     ./modules/services/tailscale.nix
     ./modules/services/restic.nix
     ./modules/services/flatpak.nix
+    ./modules/services/ollama.nix
     ./modules/users.nix
     ./modules/packages.nix
     ./modules/fonts.nix
