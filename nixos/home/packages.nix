@@ -24,6 +24,8 @@
     awscli2
     turso-cli
     vlc
+    livekit-cli
+    duckdb
   ];
 
   home.sessionVariables = {
