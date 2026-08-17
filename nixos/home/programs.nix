@@ -95,5 +95,10 @@ in
       identityFile = "~/.ssh/id_ed25519_personal";
       identitiesOnly = true;
     };
+    matchBlocks."neato-github" = {
+      hostname = "github.com";
+      identityFile = "~/.ssh/id_ed25519_neato";
+      identitiesOnly = true;
+    };
   };
 }
