@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   xsession.windowManager.i3 = {
@@ -23,6 +23,7 @@
         mod = "Mod1";
       in {
         "${mod}+Return" = "exec kitty";
+        "${mod}+Shift+Return" = "exec kitty ${inputs.herdr.packages.${pkgs.system}.default}/bin/herdr";
         "${mod}+q" = "kill";
         "${mod}+d" = "exec dmenu-recent";
         "${mod}+Control+h" = "exec clipcat-pick";

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -13,7 +13,7 @@
     xss-lock
     xidlehook
     pavucontrol
-    nodejs_20
+    nodejs_22
     slack
     code-cursor
     zoxide
@@ -26,6 +26,13 @@
     vlc
     livekit-cli
     duckdb
+    glow
+    mdcat
+    sox
+    obs-studio
+    libimobiledevice
+    ifuse
+    inputs.herdr.packages.${pkgs.system}.default
   ];
 
   home.sessionVariables = {
