@@ -40,6 +40,7 @@
       backup-snapshots = "sudo restic -r s3:s3.us-east-005.backblazeb2.com/zai-nix snapshots";
       rspi = "ssh zai@192.168.0.36";
       keepawake = "/etc/nixos/scripts/keepawake.sh";
+      md = "glow -p";
     };
 
     sessionVariables = {
