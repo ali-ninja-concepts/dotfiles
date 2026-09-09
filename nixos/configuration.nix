@@ -18,6 +18,7 @@
     ./modules/services/restic.nix
     ./modules/services/flatpak.nix
     ./modules/services/ollama.nix
+    ./modules/services/udisks2.nix
     ./modules/users.nix
     ./modules/packages.nix
     ./modules/fonts.nix
