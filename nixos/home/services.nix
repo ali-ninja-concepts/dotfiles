@@ -88,4 +88,27 @@
     source = ../../scripts/clipcat-pick.sh;
     executable = true;
   };
+
+  # dunst binds left click to close_current, so a notification carrying actions
+  # can only be acted on through middle click, which opens a dmenu picker. The
+  # companion's meeting prompt is "Start recording?" plus a Start button, so make
+  # a plain click perform the notification's default action instead.
+  #
+  # do_action is a no-op for notifications without actions, so everything else
+  # still just closes on click as before.
+  xdg.configFile."dunst/dunstrc".text = ''
+    [global]
+        mouse_left_click = do_action, close_current
+  '';
+
+  # Process ~/.config/autostart/*.desktop at login.
+  #
+  # systemd ships xdg-autostart-generator, which turns those entries into user
+  # units, but it only fires once xdg-desktop-autostart.target is started. Full
+  # desktops (GNOME, KDE) pull that target in themselves; bare i3 does not, so
+  # without this the whole XDG autostart mechanism is silently inert and apps
+  # that offer a "start at login" toggle appear to accept it and then never run.
+  systemd.user.targets.xdg-desktop-autostart = {
+    Unit.WantedBy = [ "graphical-session.target" ];
+  };
 }
