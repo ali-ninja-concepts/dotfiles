@@ -16,6 +16,7 @@
     tmux
     ncdu
     sqlite
+    ssm-session-manager-plugin
 
     # Desktop
     google-chrome
@@ -51,7 +52,7 @@
     dnsutils  # dig, nslookup, host
 
     # Development
-    nodejs_20
+    nodejs_22
     bun
     go
     pnpm
@@ -81,7 +82,8 @@
 
     # Security
     tpm2-tools
-    bitwarden-desktop
+    # bitwarden-desktop: installed via Flatpak (com.bitwarden.desktop) — the
+    # nixpkgs build pins an EOL electron-39.8.10.
 
     # VPN
     openvpn
@@ -90,5 +92,7 @@
     (pkgs.callPackage ../pkgs/opencode.nix {})
     (pkgs.callPackage ../pkgs/sidecar.nix {})
     (pkgs.callPackage ../pkgs/pi { })
+    (pkgs.callPackage ../pkgs/hermes-agent.nix { })
+    (pkgs.callPackage ../pkgs/slack-cli.nix { })
   ];
 }
