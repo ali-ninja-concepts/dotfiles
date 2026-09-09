@@ -8,6 +8,7 @@
     ./home/programs.nix
     ./home/packages.nix
     ./home/services.nix
+    ./home/webapps.nix
   ];
 
   home.username = "ali-zahir";
